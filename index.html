@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECE4010 Quiz Recorder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src=dexie.min.js></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="editable-title" contenteditable="true">记录你的ECE4010 Quiz得分</h1>
+        
+        <div class="input-group">
+            <div class="input-item">
+                <label>总 Quiz 数量</label>
+                <input type="number" id="totalQuiz" min="0">
+            </div>
+            <div class="input-item">
+                <label>已作答数量</label>
+                <input type="number" id="answeredQuiz" min="0">
+            </div>
+            <div class="input-item">
+                <label>正确数量</label>
+                <input type="number" id="correctQuiz" min="0">
+            </div>
+        </div>
+
+        <div class="stats-display">
+            <div class="stat-box">
+                <span class="stat-label">作答率</span>
+                <span class="stat-value" id="responseRate">0%</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">正确率</span>
+                <span class="stat-value" id="accuracyRate">0%</span>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="btnCorrect" class="btn btn-success">我答对了 ✅</button>
+            <button id="btnWrong" class="btn btn-warning">我没答对 ❌</button>
+            <button id="btnSkip" class="btn btn-secondary">我没作答 🤷‍♂️</button>
+        </div>
+
+        <div class="footer-notes">
+            <p>网页使用Gemini 3.0 pro 编写 编者：Shanye</p>
+            <p>2026 Spring ECE4010 Quiz 的评分标准是：</p>
+            <p>您如果保持作答率在80%以上，就可以获得5分</p>
+            <p>正确率在80%以上，则可以获得另外的5分</p>
+            <p>您可以完全按照直觉来使用这个网页，Ctrl+Z可以撤销上一次操作</p>
+            <p>所有的数据都将保存在本地浏览器中，因为我完全没有一个服务器来存储数据，所以无须担心数据问题</p>
+            <p>想法来源于手记quiz总是记错，所以做了一个神秘小网页，希望对您有所帮助</p>
+            <p>编者对ECE4010表示强烈不满！！！！</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

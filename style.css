@@ -1,0 +1,162 @@
+:root {
+    --primary-color: #4a90e2;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --success-color: #2ecc71;
+    --warning-color: #e67e22;
+    --secondary-color: #95a5a6;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* 标题样式 */
+.editable-title {
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    border-bottom: 2px dashed transparent;
+    transition: border-color 0.3s;
+    outline: none;
+}
+
+.editable-title:focus {
+    border-bottom-color: var(--primary-color);
+}
+
+/* 输入框区域布局 */
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.input-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-item label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.input-item input {
+    width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 0;
+    background: #fafafa;
+    transition: all 0.2s;
+    /* 去掉数字输入框的小箭头 */
+    -moz-appearance: textfield; 
+}
+.input-item input::-webkit-outer-spin-button,
+.input-item input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-item input:focus {
+    border-color: var(--primary-color);
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* 统计数据显示 */
+.stats-display {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* 按钮区域 */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    border: none;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-success { background-color: var(--success-color); }
+.btn-warning { background-color: var(--warning-color); }
+.btn-secondary { background-color: var(--secondary-color); }
+
+/* 底部文字 */
+.footer-notes p {
+    font-size: 0.9rem;
+    color: #999;
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+/* 响应式适配 */
+@media (min-width: 600px) {
+    .action-buttons {
+        flex-direction: row;
+    }
+    .btn {
+        flex: 1;
+        font-size: 1rem;
+    }
+}
