@@ -96,7 +96,7 @@ body {
     background-color: #f8f9fa;
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .stat-box {
@@ -113,6 +113,32 @@ body {
     font-size: 1.4rem;
     font-weight: bold;
     color: var(--text-color);
+}
+
+/* 上次更新时间显示 */
+.last-updated-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* 标签和数值之间的间距 */
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.last-updated-label {
+    font-weight: 500;
+}
+
+.last-updated-value {
+    /* 移除生硬的等宽字体和边框，改为现代的胶囊设计 */
+    font-family: inherit; 
+    background-color: rgba(74, 144, 226, 0.1); /* 使用主题色的透明版本 */
+    color: var(--primary-color); /* 文字使用主题蓝色 */
+    padding: 6px 14px;
+    border-radius: 20px; /* 胶囊圆角 */
+    font-weight: 600;
+    letter-spacing: 0.5px; /* 稍微增加字间距让数字更好读 */
 }
 
 /* 按钮区域 */

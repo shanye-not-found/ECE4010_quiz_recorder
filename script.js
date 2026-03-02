@@ -1,7 +1,12 @@
 // 初始化 Dexie 数据库
 const db = new Dexie("QuizTrackerDB");
-db.version(1).stores({
-    counts: 'id, total, answered, correct'
+db.version(2).stores({
+    counts: 'id, total, answered, correct, lastUpdated'
+}).upgrade(trans => {
+    // 升级到版本2：为现有记录添加 lastUpdated 字段
+    return trans.counts.toCollection().modify(count => {
+        count.lastUpdated = Date.now();
+    });
 });
 
 // 获取 DOM 元素
@@ -11,6 +16,7 @@ const correctInput = document.getElementById('correctQuiz');
 
 const responseRateDisplay = document.getElementById('responseRate');
 const accuracyRateDisplay = document.getElementById('accuracyRate');
+const lastUpdatedDisplay = document.getElementById('lastUpdatedDisplay');
 
 const btnCorrect = document.getElementById('btnCorrect');
 const btnWrong = document.getElementById('btnWrong');
@@ -20,7 +26,8 @@ const btnSkip = document.getElementById('btnSkip');
 let state = {
     total: 0,
     answered: 0,
-    correct: 0
+    correct: 0,
+    lastUpdated: null
 };
 
 // 历史记录栈（用于撤销）
@@ -36,9 +43,17 @@ async function loadData() {
             state.total = data.total;
             state.answered = data.answered;
             state.correct = data.correct;
+            state.lastUpdated = data.lastUpdated;
+            // 如果 lastUpdated 不存在（旧数据），则设置为当前时间并更新数据库
+            if (state.lastUpdated === undefined) {
+                state.lastUpdated = Date.now();
+                await db.counts.update(1, { lastUpdated: state.lastUpdated });
+            }
         } else {
             // 初始化
-            await db.counts.put({ id: 1, total: 0, answered: 0, correct: 0 });
+            const now = Date.now();
+            await db.counts.put({ id: 1, total: 0, answered: 0, correct: 0, lastUpdated: now });
+            state.lastUpdated = now;
         }
         updateUI();
     } catch (error) {
@@ -47,12 +62,22 @@ async function loadData() {
 }
 
 // 2. 保存数据到数据库
-async function saveData() {
+async function saveData(updateTimestamp = true) {
     try {
+        let lastUpdatedValue;
+        if (updateTimestamp) {
+            const now = Date.now();
+            state.lastUpdated = now;
+            lastUpdatedValue = now;
+        } else {
+            // 使用现有的 state.lastUpdated（例如撤销操作）
+            lastUpdatedValue = state.lastUpdated;
+        }
         await db.counts.update(1, {
             total: state.total,
             answered: state.answered,
-            correct: state.correct
+            correct: state.correct,
+            lastUpdated: lastUpdatedValue
         });
     } catch (error) {
         console.error("Save error:", error);
@@ -84,12 +109,26 @@ function performUndo() {
     // 恢复状态
     state = prevState;
     
-    // 保存并更新界面
-    saveData();
+    // 保存并更新界面，撤销时不更新时间戳
+    saveData(false);
     updateUI();
 }
 
-// 5. 更新界面
+// 5. 格式化时间戳为可读字符串
+function formatTime(timestamp) {
+    if (!timestamp) return '从未';
+    const date = new Date(timestamp);
+    // 格式: YYYY-MM-DD HH:MM:SS
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+// 6. 更新界面
 function updateUI() {
     totalInput.value = state.total;
     answeredInput.value = state.answered;
@@ -108,6 +147,7 @@ function updateUI() {
 
     responseRateDisplay.textContent = responseRate.toFixed(1) + '%';
     accuracyRateDisplay.textContent = accuracyRate.toFixed(1) + '%';
+    lastUpdatedDisplay.textContent = formatTime(state.lastUpdated);
 }
 
 // 6. 输入验证与同步
